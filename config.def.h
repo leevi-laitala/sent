@@ -10,7 +10,7 @@ static char *fontfallbacks[] = {
 
 static const char *colors[] = {
 	"#000000", /* foreground color */
-	"#FFFFFF", /* background color */
+	"#5f2529", /* background color */
 };
 
 static const float linespacing = 1.4;
@@ -25,9 +25,6 @@ static const unsigned int autoadvanceinterval = 10;
 static Mousekey mshortcuts[] = {
 	/* button         function        argument */
 	{ Button1,        advance,        {.i = 0} },
-	//{ Button3,        advance,        {.i = -1} },
-	//{ Button4,        advance,        {.i = -1} },
-	//{ Button5,        advance,        {.i = +1} },
 };
 
 static Shortcut shortcuts[] = {
