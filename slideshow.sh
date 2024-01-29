@@ -18,7 +18,7 @@ function updateSlideshowFile() {
 	find "$SLIDESHOW_FOLDER" -type f | sort | sed -e 's/^/@/' -e 's/$/\n/' > "$SLIDESHOW_FILE"
 
     # Remove all files except for png, jpg and jpeg
-    sed -i -E '/.*\.(png|jpe?g)$/I!d' "$SLIDESHOW_FILE"
+    sed -i -E '/.*\.(png|jpe?g)$/I!d; s/$/\n/' "$SLIDESHOW_FILE"
 
 	[[ ! -s "$SLIDESHOW_FILE" ]] && \
 		fatal "No slides found in '$SLIDESHOW_FOLDER'"
