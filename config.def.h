@@ -16,15 +16,18 @@ static const char *colors[] = {
 static const float linespacing = 1.4;
 
 /* how much screen estate is to be used at max for the content */
-static const float usablewidth = 0.75;
-static const float usableheight = 0.75;
+static const float usablewidth = 1;
+static const float usableheight = 1;
+
+/* Automatic advance interval in seconds */
+static const unsigned int autoadvanceinterval = 10;
 
 static Mousekey mshortcuts[] = {
 	/* button         function        argument */
-	{ Button1,        advance,        {.i = +1} },
-	{ Button3,        advance,        {.i = -1} },
-	{ Button4,        advance,        {.i = -1} },
-	{ Button5,        advance,        {.i = +1} },
+	{ Button1,        advance,        {.i = 0} },
+	//{ Button3,        advance,        {.i = -1} },
+	//{ Button4,        advance,        {.i = -1} },
+	//{ Button5,        advance,        {.i = +1} },
 };
 
 static Shortcut shortcuts[] = {

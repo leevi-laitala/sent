@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>
 #include <X11/Xatom.h>
@@ -472,7 +473,13 @@ void
 advance(const Arg *arg)
 {
 	int new_idx = idx + arg->i;
-	LIMIT(new_idx, 0, slidecount-1);
+	new_idx = new_idx % slidecount;
+
+	if (!new_idx) {
+		Arg a = {0};
+		reload(&a);
+	}
+
 	if (new_idx != idx) {
 		if (slides[idx].img)
 			slides[idx].img->state &= ~SCALED;
@@ -501,6 +508,10 @@ void
 run(void)
 {
 	XEvent ev;
+	time_t start, current;
+	double elapsed;
+
+	time(&start);
 
 	/* Waiting for window mapping */
 	while (1) {
@@ -513,9 +524,20 @@ run(void)
 	}
 
 	while (running) {
-		XNextEvent(xw.dpy, &ev);
-		if (handler[ev.type])
-			(handler[ev.type])(&ev);
+		while (XPending(xw.dpy) > 0) {
+			XNextEvent(xw.dpy, &ev);
+			if (handler[ev.type])
+				(handler[ev.type])(&ev);
+		}
+
+		time(&current);
+		elapsed = difftime(current, start);
+
+		if (elapsed > autoadvanceinterval) {
+			time(&start);
+			Arg a = {.i = 1};
+			advance(&a);
+		}
 	}
 }
 
