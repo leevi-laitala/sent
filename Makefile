@@ -6,7 +6,12 @@ include config.mk
 SRC = sent.c drw.c util.c
 OBJ = ${SRC:.c=.o}
 
-all: options sent
+all: options sent slideshow
+
+slideshow: slideshow.sh
+	mkdir -p ${DESTDIR}${PREFIX}/bin
+	cp -f slideshow ${DESTDIR}${PREFIX}/bin/slideshow
+	chmod +x ${DESTDIR}${PREFIX}/bin/slideshow
 
 options:
 	@echo sent build options:
@@ -47,6 +52,7 @@ install: all
 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/sent.1
 
 uninstall:
-	rm -f ${DESTDIR}${PREFIX}/bin/sent
+	rm -f ${DESTDIR}${PREFIX}/bin/sent ${DESTDIR}${PREFIX}/bin/slideshow
+
 
 .PHONY: all options clean dist install uninstall cscope

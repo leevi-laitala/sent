@@ -2,19 +2,23 @@
 SLIDESHOW_FOLDER="$HOME/Slideshow"
 SLIDESHOW_FILE="$HOME/slideshow-file"
 
-[[ ! -d "$SLIDESHOW_FOLDER" ]] && \
-	mkdir "$SLIDESHOW_FOLDER"
+[[ -z "$LOGFILE" ]] && \
+	LOGFILE="/dev/null"
 
-function fatal() {
+export DISPLAY=":0"
+
+mkdir -p "$SLIDESHOW_FOLDER"
+
+fatal() {
 	echo -e "FATAL: $1"
 	exit 1
 }
 
-function warning() {
+warning() {
 	echo -e "ERROR: $1"
 }
 
-function updateSlideshowFile() {
+updateSlideshowFile() {
 	find "$SLIDESHOW_FOLDER" -type f | sort | sed -e 's/^/@/' -e 's/$/\n/' > "$SLIDESHOW_FILE"
 
     # Remove all files except for png, jpg and jpeg
@@ -24,7 +28,7 @@ function updateSlideshowFile() {
 		fatal "No slides found in '$SLIDESHOW_FOLDER'"
 }
 
-function startSlideshow() {
+startSlideshow() {
 	timeout 1s xset q &> /dev/null || \
 		fatal "No X server running"
 
@@ -34,10 +38,10 @@ function startSlideshow() {
 	pidof sent > /dev/null && \
 		fatal "Slideshow already running"
 
-	sent "$SLIDESHOW_FILE" &
+	sent "$SLIDESHOW_FILE" &> "$LOGFILE" &
 }
 
-function killSlideshow() {
+killSlideshow() {
 	PID="$(pidof sent)"
 
 	[[ -z "$PID" ]] && \
@@ -52,7 +56,7 @@ function killSlideshow() {
 		fatal "Could not terminate 'sent' with pid $PID"
 }
 
-function printHelp() {
+printHelp() {
 	echo -e "usage: kiltisbulletin.sh COMMAND\n"
 	echo -e "Available commands:"
 	echo -e "  update\tUpdates slideshow config"
