@@ -6,9 +6,9 @@ include config.mk
 SRC = sent.c drw.c util.c
 OBJ = ${SRC:.c=.o}
 
-all: options sent slideshow
+all: options sent slideshow-script
 
-slideshow: slideshow.sh
+slideshow-script: slideshow
 	mkdir -p ${DESTDIR}${PREFIX}/bin
 	cp -f slideshow ${DESTDIR}${PREFIX}/bin/slideshow
 	chmod +x ${DESTDIR}${PREFIX}/bin/slideshow

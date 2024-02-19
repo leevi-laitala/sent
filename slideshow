@@ -28,6 +28,17 @@ updateSlideshowFile() {
 		fatal "No slides found in '$SLIDESHOW_FOLDER'"
 }
 
+validateSlideshowFile() {
+    TMP="/tmp/slideshow-tmp-file-$(date +'%s')"
+
+    cat "$SLIDESHOW_FILE" | sed -e "/^$/d" | cut -c 2- > "$TMP"
+
+    while IFS= read -r line; do
+        stat "$line" &> /dev/null || \
+            fatal "File does not exist. Run 'update' command: $line"
+    done < "$TMP"
+}
+
 startSlideshow() {
 	timeout 1s xset q &> /dev/null || \
 		fatal "No X server running"
@@ -72,6 +83,7 @@ case "$COMMAND" in
         exit
         ;;
     "start")
+        validateSlideshowFile
         startSlideshow
         exit
         ;;
